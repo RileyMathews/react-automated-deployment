@@ -39,6 +39,7 @@ import os
 import json
 import subprocess
 import mimetypes
+import shutil
 ```
 
 This will import the nessesary packages for our script. 
@@ -47,6 +48,7 @@ This will import the nessesary packages for our script.
 1. json will let us parse the json file we created earlier
 1. subprocess will let us run terminal commands from the python script
 1. mimetypes will give us some handy functionality to process file content types for use when we upload are build products to s3
+1. shutil allows us to delete the entire build folder that is already there before we run a new one
 
 ```
 def get_content_type(file):
@@ -86,18 +88,20 @@ This code simply gets all the variables in order we will need to finish the proc
 
 Now we are going to build our react app
 ```
+# delete current local build folder
+shutil.rmtree(build_folder)
+
 # run app build
 subprocess.check_call('npm run build', shell=True)
 print('app built')
 ```
-The subprocess method will run the command we pass it in the terminal. So npm run build is called and our app will be built
+This code will delete the current build folder and call npm run build to make a new one. 
 
 ```
 # remove old files from s3
 bucket.objects.all().delete()
 ```
-This part isn't strictly nessesary since the build folder will generate unique file names each time its run and link its html file to those. But if you want to save on cloud storage space you could manually delete your current local build folder before uploading and this command will clear out the s3 bucket before uploading the new files. You could also easily make this script delete your local build folder before making a new one as well to automate the whole process. 
-
+This part isn't strictly nessesary since the build folder will generate unique file names each time its run and link its html file to those. But if you want to save on cloud storage space you could manually delete your current local build folder before uploading and this command will clear out the s3 bucket before uploading the new files. 
 
 
 ```

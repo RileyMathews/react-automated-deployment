@@ -3,6 +3,7 @@ import os
 import json
 import subprocess
 import mimetypes
+import shutil
 
 # get content type method
 def get_content_type(file):
@@ -34,6 +35,8 @@ bucket = s3.Bucket(bucket_name)
 print(bucket_name)
 print(data)
 
+# delete current local build folder
+shutil.rmtree(build_folder)
 
 # run app build
 subprocess.check_call('npm run build', shell=True)
