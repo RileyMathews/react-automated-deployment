@@ -36,7 +36,8 @@ print(bucket_name)
 print(data)
 
 # delete current local build folder
-shutil.rmtree(build_folder)
+if os.path.exists(build_folder):
+    shutil.rmtree(build_folder)
 
 # run app build
 subprocess.check_call('npm run build', shell=True)

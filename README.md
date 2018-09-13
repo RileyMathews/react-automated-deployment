@@ -89,7 +89,8 @@ This code simply gets all the variables in order we will need to finish the proc
 Now we are going to build our react app
 ```
 # delete current local build folder
-shutil.rmtree(build_folder)
+if os.path.exists(build_folder):
+    shutil.rmtree(build_folder)
 
 # run app build
 subprocess.check_call('npm run build', shell=True)
